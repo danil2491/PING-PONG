@@ -37,12 +37,35 @@ ball = GameSprite('ball.png',250, 250, 5, 60, 50)
 clock = time.Clock()
 FPS = 60
 RUN_GAME = True
+finish = False
+speed_x = 3
+speed_y = 3
+font.init()
+font1 = font.Font(None, 35)
+lose1 = font1.render("PLAYER 1 LOSE!", True,(180, 0 ,0))
+font2 = font.Font(None, 35)
+lose2 = font1.render("PLAYER 2 LOSE!", True,(180, 0 ,0))
 while RUN_GAME:
-
     for e in event.get():
         if e.type == QUIT:
             RUN_GAME = False
+
     window.blit(background,(0,0))
+    if finish !=True:
+        ball.rect.x += speed_x
+        ball.rect.y += speed_y
+    if sprite.collide_rect(player1, ball) or sprite.collide_rect(player2, ball):
+        speed_x *=-1
+    if ball.rect.y >win_heigt - 50 or ball.rect.y < 0:
+        speed_y *=-1
+
+    if ball.rect.x <0:
+        finish = True
+        window.blit(lose1, (200, 325))
+    if ball.rect.x > win_width-50:
+        finish = True
+        window.blit(lose2, (200, 325))
+
     player1.update_L()
     player2.update_R()
     player1.reset()
@@ -50,6 +73,11 @@ while RUN_GAME:
     ball.reset()
     display.update()
     clock.tick(FPS)
+
+
+
+
+
 
 
 
